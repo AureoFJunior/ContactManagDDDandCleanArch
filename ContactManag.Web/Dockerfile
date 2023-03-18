@@ -20,5 +20,4 @@ RUN dotnet publish "ContactManag.Web.csproj" -c Release -o /app/publish /p:UseAp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-CMD ASPNETCORE_URLS="http://*:$PORT" dotnet ContactManag.Web.dll
+ENTRYPOINT ["dotnet", "ContactManag.Web/ContactManag.Web.dll"]
