@@ -54,6 +54,28 @@ namespace ContactManag.Domain.Utils
             return variable;
         }
 
+        public static bool ValidateBracketOrder(string s)
+        {
+            var opening = new List<char>();
+            var mapBrackets = new Dictionary<char, char> { { '(', ')' }, { '[', ']' }, { '{', '}' } };
+
+            foreach (char c in s)
+            {
+                if (mapBrackets.ContainsKey(c))
+                    opening.Add(c);
+
+                else if (mapBrackets.ContainsValue(c))
+                {
+                    if (opening.Count == 0 || mapBrackets[opening.Last()] != c)
+                        return false;
+
+                    opening.RemoveAt(opening.Count - 1);
+                }
+            }
+
+            return opening.Count == 0;
+        }
+
         #endregion
     }
 }

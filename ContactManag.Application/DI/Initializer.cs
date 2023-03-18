@@ -23,9 +23,10 @@ namespace ContactManag.Application.DI
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
-            services.AddScoped(typeof(IRepository<Contact>), typeof(ContactRepository));
             services.AddScoped(typeof(IRepository<Person>), typeof(PersonRepository));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddTransient(typeof(IContactRepository), typeof(ContactRepository));
 
             services.AddScoped(typeof(IContactService<Contact>), typeof(ContactService));
             services.AddScoped(typeof(IPersonService<Person>), typeof(PersonService));

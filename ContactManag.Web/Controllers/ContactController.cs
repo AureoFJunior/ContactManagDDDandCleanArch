@@ -11,6 +11,7 @@ using AutoMapper;
 using ContactManag.Domain.Interfaces.Repositories;
 using ContactManag.Domain.Interfaces.Services;
 using ContactManag.Web.Config;
+using AutoMapper.Configuration.Conventions;
 
 namespace ContactManag.Web.Controllers
 {
@@ -19,11 +20,11 @@ namespace ContactManag.Web.Controllers
     public class ContactController : Controller
     {
         private readonly IContactService<Contact> _contactService;
-        private readonly IRepository<Contact> _contactRepository;
+        private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
         private readonly IValidator _validator;
 
-        public ContactController(IRepository<Contact> contactRepository,
+        public ContactController(IContactRepository contactRepository,
             IContactService<Contact> contactService,
             IMapper mapper,
             IValidator validator)
@@ -45,6 +46,24 @@ namespace ContactManag.Web.Controllers
             if (contacts == null)
             {
                 _validator.AsNotFound("Contacts not found.");
+                return NotFound();
+            }
+
+            IEnumerable<ContactDTO> contact = _mapper.Map<IEnumerable<ContactDTO>>(contacts);
+            return Ok(contact);
+        }
+
+        /// <summary>
+        /// Return all the contacts by person.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{personId}")]
+        public async Task<IActionResult> GetContactsByPerson(int personId)
+        {
+            IEnumerable<Contact> contacts = await _contactRepository.GetAllByPersonAsync(personId);
+            if (contacts == null)
+            {
+                _validator.AsNotFound("Contacts for this Person was not found.");
                 return NotFound();
             }
 
