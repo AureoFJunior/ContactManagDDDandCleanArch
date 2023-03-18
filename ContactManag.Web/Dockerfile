@@ -3,6 +3,13 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV ASPNETCORE_URLS="http://+;"
+EXPOSE 5000
+EXPOSE 5001
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ContactManag.Web/ContactManag.Web.csproj", "ContactManag.Web/"]
@@ -20,4 +27,4 @@ RUN dotnet publish "ContactManag.Web.csproj" -c Release -o /app/publish /p:UseAp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ContactManag.Web/ContactManag.Web.dll"]
+ENTRYPOINT ["dotnet", "ContactManag.Web.dll"]
