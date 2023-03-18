@@ -1,0 +1,5 @@
+﻿build:
+  docker:
+    web: Dockerfile
+run:
+  web: dotnet ContactManag.Web.dll --urls=http://+:$PORT
